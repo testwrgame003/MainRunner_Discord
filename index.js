@@ -9,7 +9,8 @@ const {
   PermissionsBitField,
 } = require("discord.js");
 
-const RAW_URL = process.env.MAIN_RUNNER_URL || "https://tu-main-runner.up.railway.app";
+let RAW_URL = (process.env.MAIN_RUNNER_URL || "https://headlessproxy-production.up.railway.app").trim();
+if (!RAW_URL.startsWith("http://") && !RAW_URL.startsWith("https://")) RAW_URL = "https://" + RAW_URL;
 const MAIN_RUNNER_URL = RAW_URL.replace(/\/$/, "");
 
 const client = new Client({
@@ -38,20 +39,22 @@ client.on(Events.MessageCreate, async (msg) => {
     .setColor(0x0ea5e9)
     .setTitle("⚡ Zenith Main Runner 24/7 — Auto-Accept (ES 🇪🇸 / EN 🇺🇸)")
     .setDescription(
-      "🇪🇸 **Español:** Acepta solicitudes 24/7 en la nube desde tu móvil o PC.\n" +
-      "🔒 **Zero-Storage:** Tus datos **se quedan en el almacenamiento local de tu dispositivo** y al cerrar sesión **se borran de la RAM del servidor (0 bytes)**.\n\n" +
-      "🇺🇸 **English:** Auto-accept friend requests 24/7 in the cloud from mobile or PC.\n" +
-      "🔒 **Zero-Storage:** Your credentials **stay in your device's local storage** and on logout **are wiped from server RAM (0 bytes)**."
+      "🇪🇸 **Español:** Acepta solicitudes de forma **continua (sin límite de tiempo)** en la nube desde tu móvil o PC.\n" +
+      "🔒 **Zero-Storage:** Tus datos **se quedan en el almacenamiento local de tu dispositivo** y al cerrar sesión **se borran de la RAM del servidor (0 bytes)**.\n" +
+      "⏰ **Regla Pre-Reset (05:45 UTC):** 15 minutos antes del reset diario (06:00 UTC), todas las sesiones se apagan automáticamente.\n\n" +
+      "🇺🇸 **English:** Auto-accept friend requests **continuously (no time limit)** in the cloud from mobile or PC.\n" +
+      "🔒 **Zero-Storage:** Your credentials **stay in your device's local storage** and on logout **are wiped from server RAM (0 bytes)**.\n" +
+      "⏰ **Pre-Reset Rule (05:45 UTC):** 15 minutes before the daily reset (06:00 UTC), all active sessions shut down automatically."
     )
     .addFields(
       {
         name: "🇪🇸 Resumen Rápido",
-        value: "1. Abre el Panel Web (ES) y desbloquea tu _secure.zip.\n2. Pulsa ▶️ ACTIVAR.\n3. Si abres el juego en el móvil, pasa a 📱 Modo Espera sin doble login.",
+        value: "1. Abre el Panel Web (ES) y desbloquea tu _secure.zip.\n2. Pulsa ▶️ ACTIVAR (queda Online hasta que des Offline o abras el juego).\n3. Se apaga solo a las 05:45 UTC (15m antes del reset).",
         inline: true,
       },
       {
         name: "🇺🇸 Quick Summary",
-        value: "1. Open Web Panel (EN) and unlock your _secure.zip.\n2. Tap ▶️ START.\n3. Opening the game on mobile switches to 📱 Standby Mode safely.",
+        value: "1. Open Web Panel (EN) and unlock your _secure.zip.\n2. Tap ▶️ START (stays Online until you go Offline or open the game).\n3. Auto-stops at 05:45 UTC (15m before reset).",
         inline: true,
       }
     )
@@ -83,9 +86,9 @@ client.on(Events.InteractionCreate, async (i) => {
       .addFields(
         { name: "Paso 1: Sincronizar Móvil (1ra vez)", value: "Extrae dc.bin de tu _secure.zip con ZArchiver y pégalo en Android/data/jp.pokemon.pokemontcgp/files/dc.bin." },
         { name: "Paso 2: Desbloquear en Navegador", value: "Entra al Panel Web (ES), elige tu _secure.zip, pon tu clave y toca 🔓 Desbloquear. Usa 💾 Recordar en mi Móvil para guardarlo localmente." },
-        { name: "Paso 3: Activar en RAM", value: "Elige el tiempo y pulsa ▶️ ACTIVAR. Cuando diga En Línea ya puedes bloquear tu pantalla." },
-        { name: "Paso 4: Jugar sin doble login", value: "Al abrir el juego en tu celular, el sistema pasa a 📱 En Espera automáticamente. Al salir del juego, toca ▶️ ACTIVAR / REANUDAR." },
-        { name: "Paso 5: Cerrar y Purgar", value: "Pulsa ⏹️ CERRAR SESIÓN para borrar todo de la memoria RAM del servidor al instante." }
+        { name: "Paso 3: Modo Continuo en RAM", value: "Pulsa ▶️ ACTIVAR. Tu cuenta quedará Online indefinidamente hasta que des Offline o entres al juego." },
+        { name: "Paso 4: Pausa por Doble Login", value: "Al abrir el juego en tu celular, el sistema detiene la recepción y pasa a 📱 En Espera automáticamente. Al salir del juego, toca ▶️ ACTIVAR / REANUDAR." },
+        { name: "Paso 5: Apagado Pre-Reset (05:45 UTC)", value: "Por regla del Reroll, 15 minutos antes del reset diario (06:00 UTC) todos los runners se apagan y borran de la RAM automáticamente." }
       );
     return i.reply({ embeds: [emb], ephemeral: true });
   }
@@ -98,9 +101,9 @@ client.on(Events.InteractionCreate, async (i) => {
       .addFields(
         { name: "Step 1: Sync Phone (One-time)", value: "Extract dc.bin from your _secure.zip using ZArchiver and paste it into Android/data/jp.pokemon.pokemontcgp/files/dc.bin." },
         { name: "Step 2: Unlock in Browser", value: "Open Web Panel (EN), select your _secure.zip, enter password and tap 🔓 Unlock. Tap 💾 Save on Device to store locally." },
-        { name: "Step 3: Start in RAM", value: "Choose duration and tap ▶️ START. Once Online, you can lock your phone screen." },
-        { name: "Step 4: Play without double-login", value: "When you open the game on mobile, the server enters 📱 Standby Mode automatically. When done playing, tap ▶️ START / RESUME." },
-        { name: "Step 5: Log Out & Wipe", value: "Tap ⏹️ LOG OUT & WIPE to immediately clear your session from server RAM." }
+        { name: "Step 3: Continuous Mode in RAM", value: "Tap ▶️ START. Your account stays Online indefinitely until you turn it off or open the game." },
+        { name: "Step 4: Double-Login Standby", value: "When you open the game on mobile, the server stops and enters 📱 Standby Mode automatically. When done playing, tap ▶️ START / RESUME." },
+        { name: "Step 5: Pre-Reset Cutoff (05:45 UTC)", value: "Per Reroll rules, 15 minutes before the daily reset (06:00 UTC) all active runners shut down and wipe server RAM automatically." }
       );
     return i.reply({ embeds: [emb], ephemeral: true });
   }
@@ -110,8 +113,8 @@ client.on(Events.InteractionCreate, async (i) => {
       .setColor(0x22c55e)
       .setTitle("🛡️ Zero-Storage Privacy (ES / EN)")
       .addFields(
-        { name: "🇪🇸 Privacidad Blindada", value: "• Tu _secure.zip (AES-256) se abre solo en tu navegador.\n• Se guarda únicamente en tu almacenamiento local (localStorage).\n• Al cerrar sesión se purga la RAM a 0 bytes." },
-        { name: "🇺🇸 Blinded Privacy", value: "• Your _secure.zip (AES-256) is unlocked only in your browser.\n• Stored strictly in your device's localStorage.\n• Logging out purges server RAM to 0 bytes." }
+        { name: "🇪🇸 Privacidad Blindada", value: "• Tu _secure.zip (AES-256) se abre solo en tu navegador.\n• Se guarda únicamente en tu almacenamiento local (localStorage).\n• Al cerrar sesión o a las 05:45 UTC se purga la RAM a 0 bytes." },
+        { name: "🇺🇸 Blinded Privacy", value: "• Your _secure.zip (AES-256) is unlocked only in your browser.\n• Stored strictly in your device's localStorage.\n• Logging out or reaching 05:45 UTC purges server RAM to 0 bytes." }
       );
     return i.reply({ embeds: [emb], ephemeral: true });
   }
@@ -121,13 +124,20 @@ client.on(Events.InteractionCreate, async (i) => {
     try {
       const r = await fetch(MAIN_RUNNER_URL + "/api/public/stats", { signal: AbortSignal.timeout(6000) });
       const s = await r.json();
+      const hrs = Math.floor((s.seconds_until_cutoff || 0) / 3600);
+      const mins = Math.floor(((s.seconds_until_cutoff || 0) % 3600) / 60);
+      const cutoffText = s.in_pre_reset_cutoff
+        ? "🛑 ACTIVO (05:45 - 06:00 UTC)"
+        : hrs + "h " + mins + "m (05:45 UTC)";
+
       const emb = new EmbedBuilder()
-        .setColor(0x22c55e)
+        .setColor(s.in_pre_reset_cutoff ? 0xef4444 : 0x22c55e)
         .setTitle("🟢 Main Runner Server — Online 24/7")
         .setDescription(
           "• **Online / En Línea:** " + s.online_runners + "\n" +
           "• **Standby / En Espera:** " + s.holding_runners + "\n" +
           "• **Accepted / Aceptadas:** " + s.total_accepted + "\n" +
+          "• **Pre-Reset Cutoff:** " + cutoffText + "\n" +
           "• **Disk / En Disco:** " + s.storage_bytes_on_disk + " bytes"
         );
       return i.editReply({ embeds: [emb] });
