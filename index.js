@@ -42,35 +42,6 @@ client.on(Events.MessageCreate, async (msg) => {
       "🇪🇸 **Panel nube para tu cuenta Main** con protección **Anti-Ban (Sigilo Emulador)**, credenciales locales y sincronización automática con Discord.\n" +
       "🇺🇸 **Cloud runner for your Main account** with **Anti-Ban (Emulator Stealth)**, local credentials, and automatic Discord sync."
     )
-    .addFields(
-      {
-        name: "🇪🇸 Funciones Incluidas",
-        value:
-          "• 🤝 **Auto-Accept:** Tandas estilo emulador + Online en Discord.\n" +
-          "• ✨ **Radar GP (Manual):** Revisa Elecciones Mágicas y te enlaza al post.\n" +
-          "• 🧪 **GP Test VIP:** Limpieza segura conservando VIP + IDs Protegidas.\n" +
-          "• ⏰ **Horario UTC:** Encendido diario + corte Pre-Reset (`05:45 UTC`).\n" +
-          "• 🔒 **Privacidad:** Tus credenciales quedan guardadas en tu navegador.",
-        inline: true,
-      },
-      {
-        name: "🇺🇸 Included Features",
-        value:
-          "• 🤝 **Auto-Accept:** Emulator-paced batches + Discord Online sync.\n" +
-          "• ✨ **GP Radar (Manual):** Checks Wonder Picks & links the forum post.\n" +
-          "• 🧪 **VIP GP Test:** Safe cleanup keeping VIPs + Protected IDs.\n" +
-          "• ⏰ **UTC Schedule:** Daily auto-start + Pre-Reset cutoff (`05:45 UTC`).\n" +
-          "• 🔒 **Privacy:** Your credentials stay stored locally in your browser.",
-        inline: true,
-      },
-      {
-        name: "📦 Primer Paso / First Step",
-        value:
-          "🇪🇸 Ejecuta `CloneMain.ahk` en tu carpeta `accounts` para crear tu `_secure.zip` y abre el panel web.\n" +
-          "🇺🇸 Run `CloneMain.ahk` inside your `accounts` folder to create your `_secure.zip`, then open the web panel.",
-        inline: false,
-      }
-    )
     .setFooter({ text: "Zenith Rise • Sigilo Emulador + IP Residencial • Local AES-256" });
 
   const row1 = new ActionRowBuilder().addComponents(
@@ -86,16 +57,20 @@ client.on(Events.MessageCreate, async (msg) => {
 
   const row2 = new ActionRowBuilder().addComponents(
     new ButtonBuilder()
+      .setCustomId("features_info")
+      .setLabel("✨ Funciones / Features")
+      .setStyle(ButtonStyle.Primary),
+    new ButtonBuilder()
       .setCustomId("guide_es")
       .setLabel("📖 Guía (ES)")
-      .setStyle(ButtonStyle.Primary),
+      .setStyle(ButtonStyle.Secondary),
     new ButtonBuilder()
       .setCustomId("guide_en")
       .setLabel("📖 Guide (EN)")
-      .setStyle(ButtonStyle.Primary),
+      .setStyle(ButtonStyle.Secondary),
     new ButtonBuilder()
       .setCustomId("sec_info")
-      .setLabel("🛡️ Seguridad & Anti-Ban")
+      .setLabel("🛡️ Anti-Ban")
       .setStyle(ButtonStyle.Secondary),
     new ButtonBuilder()
       .setCustomId("live_st")
@@ -108,6 +83,45 @@ client.on(Events.MessageCreate, async (msg) => {
 
 client.on(Events.InteractionCreate, async (i) => {
   if (!i.isButton()) return;
+
+  // ===================== FUNCIONES INCLUIDAS (DESPLEGABLE) =====================
+  if (i.customId === "features_info") {
+    const emb = new EmbedBuilder()
+      .setColor(0x0ea5e9)
+      .setTitle("✨ Funciones Incluidas / Included Features")
+      .addFields(
+        {
+          name: "🇪🇸 Español",
+          value:
+            "• 🤝 **Auto-Accept:** Tandas estilo emulador + estado Online automático en Discord.\n" +
+            "• ✨ **Radar GP (Manual):** Revisa tus Elecciones Mágicas sin gastar energía, verifica si es un God Pack real y te da el tiempo restante, imagen y link al post.\n" +
+            "• 🧪 **GP Test VIP:** Limpieza segura 1 a 1 conservando la lista VIP y tus IDs Protegidas.\n" +
+            "• ⏰ **Horario UTC:** Encendido diario automático + apagado Pre-Reset (`05:45 UTC`).\n" +
+            "• 🔒 **Privacidad Local:** Tus credenciales quedan guardadas en tu propio navegador.",
+          inline: false,
+        },
+        {
+          name: "🇺🇸 English",
+          value:
+            "• 🤝 **Auto-Accept:** Emulator-paced batches + automatic Discord Online sync.\n" +
+            "• ✨ **GP Radar (Manual):** Checks Wonder Picks without spending stamina, verifies true God Packs, and shows time remaining, image & forum link.\n" +
+            "• 🧪 **VIP GP Test:** Safe 1-by-1 cleanup keeping VIPs and your Protected IDs.\n" +
+            "• ⏰ **UTC Schedule:** Daily auto-start + Pre-Reset cutoff (`05:45 UTC`).\n" +
+            "• 🔒 **Local Privacy:** Your credentials stay stored locally in your browser.",
+          inline: false,
+        },
+        {
+          name: "📦 Primer Paso / First Step",
+          value:
+            "🇪🇸 Ejecuta `CloneMain.ahk` dentro de tu carpeta `accounts` para crear tu `_secure.zip` y luego abre el Panel Web.\n" +
+            "🇺🇸 Run `CloneMain.ahk` inside your `accounts` folder to create your `_secure.zip`, then open the Web Panel.",
+          inline: false,
+        }
+      )
+      .setFooter({ text: "Zenith Rise • Pulsa Guía (ES/EN) para el tutorial paso a paso" });
+
+    return i.reply({ embeds: [emb], ephemeral: true });
+  }
 
   // ===================== GUÍA COMPLETA (ESPAÑOL) =====================
   if (i.customId === "guide_es") {
