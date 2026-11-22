@@ -30,46 +30,77 @@ client.on(Events.MessageCreate, async (msg) => {
   if (msg.content.trim().toLowerCase() !== "!setup-runner") return;
 
   if (!msg.member.permissions.has(PermissionsBitField.Flags.ManageGuild)) {
-    return msg.reply("Solo administradores / Admins only.");
+    return msg.reply("❌ Solo administradores / Admins only.");
   }
 
   await msg.delete().catch(() => {});
 
   const mainEmbed = new EmbedBuilder()
     .setColor(0x0ea5e9)
-    .setTitle("⚡ Zenith Main Runner 24/7 — Auto-Accept (ES 🇪🇸 / EN 🇺🇸)")
+    .setTitle("⚡ Zenith Main Runner 24/7")
     .setDescription(
-      "🇪🇸 **Español:** Acepta solicitudes de forma **continua (sin límite de tiempo)** en la nube desde tu móvil o PC.\n" +
-      "🔒 **Zero-Storage:** Tus datos **se quedan en el almacenamiento local de tu dispositivo** y al cerrar sesión **se borran de la RAM del servidor (0 bytes)**.\n" +
-      "⏰ **Regla Pre-Reset (05:45 UTC):** 15 minutos antes del reset diario (06:00 UTC), todas las sesiones se apagan automáticamente.\n\n" +
-      "🇺🇸 **English:** Auto-accept friend requests **continuously (no time limit)** in the cloud from mobile or PC.\n" +
-      "🔒 **Zero-Storage:** Your credentials **stay in your device's local storage** and on logout **are wiped from server RAM (0 bytes)**.\n" +
-      "⏰ **Pre-Reset Rule (05:45 UTC):** 15 minutes before the daily reset (06:00 UTC), all active sessions shut down automatically."
+      "🇪🇸 **Panel nube para tu cuenta Main** con protección **Anti-Ban (Sigilo Emulador)**, credenciales locales y sincronización automática con Discord.\n" +
+      "🇺🇸 **Cloud runner for your Main account** with **Anti-Ban (Emulator Stealth)**, local credentials, and automatic Discord sync."
     )
     .addFields(
       {
-        name: "🇪🇸 Resumen Rápido",
-        value: "1. Abre el Panel Web (ES) y desbloquea tu _secure.zip.\n2. Pulsa ▶️ ACTIVAR (queda Online hasta que des Offline o abras el juego).\n3. Se apaga solo a las 05:45 UTC (15m antes del reset).",
+        name: "🇪🇸 Funciones Incluidas",
+        value:
+          "• 🤝 **Auto-Accept:** Tandas estilo emulador + Online en Discord.\n" +
+          "• ✨ **Radar GP (Manual):** Revisa Elecciones Mágicas y te enlaza al post.\n" +
+          "• 🧪 **GP Test VIP:** Limpieza segura conservando VIP + IDs Protegidas.\n" +
+          "• ⏰ **Horario UTC:** Encendido diario + corte Pre-Reset (`05:45 UTC`).\n" +
+          "• 🔒 **Privacidad:** Tus credenciales quedan guardadas en tu navegador.",
         inline: true,
       },
       {
-        name: "🇺🇸 Quick Summary",
-        value: "1. Open Web Panel (EN) and unlock your _secure.zip.\n2. Tap ▶️ START (stays Online until you go Offline or open the game).\n3. Auto-stops at 05:45 UTC (15m before reset).",
+        name: "🇺🇸 Included Features",
+        value:
+          "• 🤝 **Auto-Accept:** Emulator-paced batches + Discord Online sync.\n" +
+          "• ✨ **GP Radar (Manual):** Checks Wonder Picks & links the forum post.\n" +
+          "• 🧪 **VIP GP Test:** Safe cleanup keeping VIPs + Protected IDs.\n" +
+          "• ⏰ **UTC Schedule:** Daily auto-start + Pre-Reset cutoff (`05:45 UTC`).\n" +
+          "• 🔒 **Privacy:** Your credentials stay stored locally in your browser.",
         inline: true,
+      },
+      {
+        name: "📦 Primer Paso / First Step",
+        value:
+          "🇪🇸 Ejecuta `CloneMain.ahk` en tu carpeta `accounts` para crear tu `_secure.zip` y abre el panel web.\n" +
+          "🇺🇸 Run `CloneMain.ahk` inside your `accounts` folder to create your `_secure.zip`, then open the web panel.",
+        inline: false,
       }
     )
-    .setFooter({ text: "Zenith Rise • Local AES-256 & Ephemeral RAM Engine" });
+    .setFooter({ text: "Zenith Rise • Sigilo Emulador + IP Residencial • Local AES-256" });
 
   const row1 = new ActionRowBuilder().addComponents(
-    new ButtonBuilder().setLabel("🇪🇸 Abrir Panel Web (ES)").setStyle(ButtonStyle.Link).setURL(MAIN_RUNNER_URL + "/?lang=es"),
-    new ButtonBuilder().setLabel("🇺🇸 Open Web Panel (EN)").setStyle(ButtonStyle.Link).setURL(MAIN_RUNNER_URL + "/?lang=en")
+    new ButtonBuilder()
+      .setLabel("🇪🇸 Abrir Panel Web (ES)")
+      .setStyle(ButtonStyle.Link)
+      .setURL(MAIN_RUNNER_URL + "/?lang=es"),
+    new ButtonBuilder()
+      .setLabel("🇺🇸 Open Web Panel (EN)")
+      .setStyle(ButtonStyle.Link)
+      .setURL(MAIN_RUNNER_URL + "/?lang=en")
   );
 
   const row2 = new ActionRowBuilder().addComponents(
-    new ButtonBuilder().setCustomId("guide_es").setLabel("📖 Guía (ES)").setStyle(ButtonStyle.Primary),
-    new ButtonBuilder().setCustomId("guide_en").setLabel("📖 Guide (EN)").setStyle(ButtonStyle.Primary),
-    new ButtonBuilder().setCustomId("sec_info").setLabel("🛡️ Zero-Storage").setStyle(ButtonStyle.Secondary),
-    new ButtonBuilder().setCustomId("live_st").setLabel("📊 Status").setStyle(ButtonStyle.Success)
+    new ButtonBuilder()
+      .setCustomId("guide_es")
+      .setLabel("📖 Guía (ES)")
+      .setStyle(ButtonStyle.Primary),
+    new ButtonBuilder()
+      .setCustomId("guide_en")
+      .setLabel("📖 Guide (EN)")
+      .setStyle(ButtonStyle.Primary),
+    new ButtonBuilder()
+      .setCustomId("sec_info")
+      .setLabel("🛡️ Seguridad & Anti-Ban")
+      .setStyle(ButtonStyle.Secondary),
+    new ButtonBuilder()
+      .setCustomId("live_st")
+      .setLabel("📊 Status")
+      .setStyle(ButtonStyle.Success)
   );
 
   await msg.channel.send({ embeds: [mainEmbed], components: [row1, row2] });
@@ -78,71 +109,199 @@ client.on(Events.MessageCreate, async (msg) => {
 client.on(Events.InteractionCreate, async (i) => {
   if (!i.isButton()) return;
 
+  // ===================== GUÍA COMPLETA (ESPAÑOL) =====================
   if (i.customId === "guide_es") {
     const emb = new EmbedBuilder()
       .setColor(0x38bdf8)
-      .setTitle("🇪🇸 Guía Paso a Paso — Main Runner")
-      .setDescription("🔒 **Importante:** Tus datos **se quedan en el almacenamiento local de tu dispositivo** y al cerrar sesión **se borran del servidor (0 bytes)**.")
+      .setTitle("🇪🇸 Guía Completa — Zenith Main Runner")
+      .setDescription(
+        "🔒 **Tus credenciales se guardan de forma local en tu navegador (`localStorage`).** Tu archivo `_secure.zip` se descifra en tu propio dispositivo y nunca se sube al servidor."
+      )
       .addFields(
-        { name: "Paso 1: Sincronizar Móvil (1ra vez)", value: "Extrae dc.bin de tu _secure.zip con ZArchiver y pégalo en Android/data/jp.pokemon.pokemontcgp/files/dc.bin." },
-        { name: "Paso 2: Desbloquear en Navegador", value: "Entra al Panel Web (ES), elige tu _secure.zip, pon tu clave y toca 🔓 Desbloquear. Usa 💾 Recordar en mi Móvil para guardarlo localmente." },
-        { name: "Paso 3: Modo Continuo en RAM", value: "Pulsa ▶️ ACTIVAR. Tu cuenta quedará Online indefinidamente hasta que des Offline o entres al juego." },
-        { name: "Paso 4: Pausa por Doble Login", value: "Al abrir el juego en tu celular, el sistema detiene la recepción y pasa a 📱 En Espera automáticamente. Al salir del juego, toca ▶️ ACTIVAR / REANUDAR." },
-        { name: "Paso 5: Apagado Pre-Reset (05:45 UTC)", value: "Por regla del Reroll, 15 minutos antes del reset diario (06:00 UTC) todos los runners se apagan y borran de la RAM automáticamente." }
-      );
+        {
+          name: "1️⃣ Clonar tu cuenta (Solo la primera vez)",
+          value:
+            "• Ve a tu carpeta `accounts` y ejecuta **`CloneMain.ahk`** *(requiere 7-Zip instalado)*.\n" +
+            "• Elige tu instancia de MuMu, escribe un nombre sin espacios y una contraseña.\n" +
+            "• Pulsa **Clone ZIP**: creará `<nombre>_secure.zip` cifrado con AES-256 **sin cerrar el juego ni borrar tu cuenta del emulador**.\n" +
+            "• *(Opcional móvil)* Si también juegas en teléfono, copia el `dc.bin` del ZIP a `Android/data/jp.pokemon.pokemontcgp/files/dc.bin`.",
+        },
+        {
+          name: "2️⃣ Configurar Paso 1 en el Panel Web",
+          value:
+            "• Abre **🇪🇸 Abrir Panel Web (ES)**, carga tu `_secure.zip`, ingresa tu contraseña y toca **🔓 Desbloquear y Guardar**.\n" +
+            "• Escribe tu **ID de 16 dígitos** y elige tu grupo (**Elite Four** o **Gym Leader**).\n" +
+            "• Selecciona tu **País** *(IP Residencial)* y el **Dispositivo Virtual** que coincida con tu emulador o teléfono.",
+        },
+        {
+          name: "3️⃣ Control en Vivo y Modo Espera",
+          value:
+            "• **▶️ PONER ONLINE:** Acepta solicitudes automáticamente y te marca Online en Discord *(se mantiene conectado incluso si actualizamos el servidor)*.\n" +
+            "• **📱 VOY A JUGAR:** Pausa la sesión para que juegues tranquilo. Si olvidas pulsarlo y abres el juego, el sistema se pausará solo.\n" +
+            "• **⏹️ APAGAR SESIÓN:** Te pone Offline al instante.",
+        },
+        {
+          name: "4️⃣ ✨ Revisar Elecciones Mágicas (Radar GP)",
+          value:
+            "• Función **100% manual** (solo se ejecuta cuando pulsas el botón; tiene espera de 60s).\n" +
+            "• Revisa tus Elecciones Mágicas **sin gastar energía**, valida si es un **God Pack real** *(distinguiéndolo de sobres normales en cuentas `[2P]`)*, te muestra el **tiempo restante**, la **imagen** y el **link directo al post en Discord**.",
+        },
+        {
+          name: "5️⃣ 🧪 GP Test VIP y ⏰ Horario Automático (UTC)",
+          value:
+            "• **IDs Protegidas:** Agrega las IDs de 16 dígitos que nunca quieres borrar (amigos reales o cuentas propias).\n" +
+            "• **GP Test:** Elimina amigos no-VIP respetando pausas seguras. Puedes lanzarlo manual o activar **Auto GP Test** (por límite de amigos y antes del reset).\n" +
+            "• **Horario UTC (Paso 4):** Programa tu hora diaria de inicio y apagado. A las **05:45 UTC** (15m antes del reset) todo se apaga automáticamente.",
+        }
+      )
+      .setFooter({ text: "Zenith Rise • Usa '🗑️ Apagar Todo y Borrar Datos' cuando quieras limpiar tu navegador" });
+
     return i.reply({ embeds: [emb], ephemeral: true });
   }
 
+  // ===================== COMPLETE GUIDE (ENGLISH) =====================
   if (i.customId === "guide_en") {
     const emb = new EmbedBuilder()
       .setColor(0x38bdf8)
-      .setTitle("🇺🇸 Step-by-Step Guide — Main Runner")
-      .setDescription("🔒 **Important:** Your credentials **stay in your device's local storage** and on logout **are wiped from the server (0 bytes)**.")
+      .setTitle("🇺🇸 Complete Guide — Zenith Main Runner")
+      .setDescription(
+        "🔒 **Your credentials stay stored locally in your browser (`localStorage`).** Your `_secure.zip` is decrypted client-side on your own device and is never uploaded."
+      )
       .addFields(
-        { name: "Step 1: Sync Phone (One-time)", value: "Extract dc.bin from your _secure.zip using ZArchiver and paste it into Android/data/jp.pokemon.pokemontcgp/files/dc.bin." },
-        { name: "Step 2: Unlock in Browser", value: "Open Web Panel (EN), select your _secure.zip, enter password and tap 🔓 Unlock. Tap 💾 Save on Device to store locally." },
-        { name: "Step 3: Continuous Mode in RAM", value: "Tap ▶️ START. Your account stays Online indefinitely until you turn it off or open the game." },
-        { name: "Step 4: Double-Login Standby", value: "When you open the game on mobile, the server stops and enters 📱 Standby Mode automatically. When done playing, tap ▶️ START / RESUME." },
-        { name: "Step 5: Pre-Reset Cutoff (05:45 UTC)", value: "Per Reroll rules, 15 minutes before the daily reset (06:00 UTC) all active runners shut down and wipe server RAM automatically." }
-      );
+        {
+          name: "1️⃣ Clone Your Account (First-time setup)",
+          value:
+            "• Open your `accounts` folder and run **`CloneMain.ahk`** *(requires 7-Zip installed)*.\n" +
+            "• Select your MuMu instance, enter a file name (no spaces), and set a ZIP password.\n" +
+            "• Click **Clone ZIP**: it creates an AES-256 `<name>_secure.zip` **without closing the game or deleting your account from MuMu**.\n" +
+            "• *(Optional mobile)* If you also play on Android, copy `dc.bin` from the ZIP to `Android/data/jp.pokemon.pokemontcgp/files/dc.bin`.",
+        },
+        {
+          name: "2️⃣ Configure Step 1 in the Web Panel",
+          value:
+            "• Open **🇺🇸 Open Web Panel (EN)**, pick your `_secure.zip`, enter your password, and tap **🔓 Unlock & Save**.\n" +
+            "• Enter your **16-digit Main ID** and choose your group (**Elite Four** or **Gym Leader**).\n" +
+            "• Pick your **Country** *(Residential IP)* and select the **Virtual Device** matching your emulator or phone.",
+        },
+        {
+          name: "3️⃣ Live Control & Standby Mode",
+          value:
+            "• **▶️ GO ONLINE NOW:** Auto-accepts friend requests and marks you Online in Discord *(stays Online seamlessly through server updates)*.\n" +
+            "• **📱 I'M GOING TO PLAY:** Pauses the runner so you can play safely. If you open the game directly, Smart-Yield pauses it automatically.\n" +
+            "• **⏹️ STOP SESSION:** Disconnects and marks you Offline immediately.",
+        },
+        {
+          name: "4️⃣ ✨ Check Wonder Picks (GP Radar)",
+          value:
+            "• **100% manual** on-demand button (60s cooldown).\n" +
+            "• Checks your Wonder Pick board **without spending stamina**, verifies **true God Packs** *(filtering out pre-GP normal packs on `[2P]` accounts)*, and shows **time remaining**, **card image**, and a **direct Discord forum link**.",
+        },
+        {
+          name: "5️⃣ 🧪 VIP GP Test & ⏰ Auto Schedule (UTC)",
+          value:
+            "• **Protected IDs:** Add 16-digit IDs that must never be removed (friends or alt accounts).\n" +
+            "• **GP Test:** Removes non-VIP friends at a safe emulator pace. Run it manually or enable **Auto GP Test** (by friend limit & pre-reset).\n" +
+            "• **UTC Schedule (Step 4):** Set daily auto start/stop times. At **05:45 UTC** (15m before reset) all runners shut down automatically.",
+        }
+      )
+      .setFooter({ text: "Zenith Rise • Use '🗑️ Stop All & Wipe Data' anytime to clear your browser" });
+
     return i.reply({ embeds: [emb], ephemeral: true });
   }
 
+  // ===================== SEGURIDAD, PRIVACIDAD & ANTI-BAN =====================
   if (i.customId === "sec_info") {
     const emb = new EmbedBuilder()
       .setColor(0x22c55e)
-      .setTitle("🛡️ Zero-Storage Privacy (ES / EN)")
+      .setTitle("🛡️ Seguridad Local y Protecciones Anti-Ban (ES / EN)")
       .addFields(
-        { name: "🇪🇸 Privacidad Blindada", value: "• Tu _secure.zip (AES-256) se abre solo en tu navegador.\n• Se guarda únicamente en tu almacenamiento local (localStorage).\n• Al cerrar sesión o a las 05:45 UTC se purga la RAM a 0 bytes." },
-        { name: "🇺🇸 Blinded Privacy", value: "• Your _secure.zip (AES-256) is unlocked only in your browser.\n• Stored strictly in your device's localStorage.\n• Logging out or reaching 05:45 UTC purges server RAM to 0 bytes." }
-      );
+        {
+          name: "🇪🇸 Privacidad Local de Credenciales",
+          value:
+            "• **Descifrado 100% en tu navegador:** Ni tu `_secure.zip` (AES-256) ni su contraseña se envían al servidor.\n" +
+            "• **Almacenamiento local:** Tus datos se quedan guardados en tu dispositivo (`localStorage`) para que no tengas que subir el ZIP cada día.\n" +
+            "• **Control total:** Al pulsar **Apagar Todo y Borrar Datos**, se detiene tu sesión y se limpia cualquier dato temporal o horario cifrado.",
+        },
+        {
+          name: "🇪🇸 Mejoras Anti-Ban (Sigilo Emulador)",
+          value:
+            "• **IP Residencial por País (Sticky 120m):** Cada cuenta usa su propio puerto residencial pegajoso en lugar de IPs de datacenter compartidas.\n" +
+            "• **Dispositivo Virtual Coherente:** Simula el modelo Android que elijas con secuencia de inicio y telemetría real.\n" +
+            "• **Ritmo de Emulador:** Acepta en tandas de ~10 con pausas naturales de recarga y borra en GP Test respetando la ventana segura de **9 bajas / 5 min**.\n" +
+            "• **Smart-Yield:** Si abres el juego, cede la sesión automáticamente sin conflictos.",
+        },
+        {
+          name: "🇺🇸 Local Credential Privacy",
+          value:
+            "• **100% Client-Side Decryption:** Neither your `_secure.zip` (AES-256) nor its password is ever uploaded.\n" +
+            "• **Local Storage:** Credentials remain saved in your device's browser (`localStorage`).\n" +
+            "• **Full Control:** Tapping **Stop All & Wipe Data** halts your session and purges any temporary/scheduled encrypted state.",
+        },
+        {
+          name: "🇺🇸 Anti-Ban Hardening (Emulator Stealth)",
+          value:
+            "• **Country Residential Sticky IP (120m):** Dedicated sticky residential port per account instead of shared datacenter IPs.\n" +
+            "• **Consistent Virtual Device:** Matches your chosen Android model with realistic login & telemetry.\n" +
+            "• **Emulator Pacing:** Accepts in ~10-request batches with natural refresh delays, and caps GP Test deletions at **9 ops / 5 min**.\n" +
+            "• **Smart-Yield:** Automatically yields if you open the game to avoid login conflicts.",
+        }
+      )
+      .setFooter({ text: "Zenith Rise • Always-On Stealth Architecture" });
+
     return i.reply({ embeds: [emb], ephemeral: true });
   }
 
+  // ===================== LIVE SERVER STATUS =====================
   if (i.customId === "live_st") {
     await i.deferReply({ ephemeral: true });
     try {
-      const r = await fetch(MAIN_RUNNER_URL + "/api/public/stats", { signal: AbortSignal.timeout(6000) });
+      const r = await fetch(MAIN_RUNNER_URL + "/api/public/stats", {
+        signal: AbortSignal.timeout(6000),
+      });
+      if (!r.ok) throw new Error("HTTP " + r.status);
       const s = await r.json();
+
       const hrs = Math.floor((s.seconds_until_cutoff || 0) / 3600);
       const mins = Math.floor(((s.seconds_until_cutoff || 0) % 3600) / 60);
       const cutoffText = s.in_pre_reset_cutoff
         ? "🛑 ACTIVO (05:45 - 06:00 UTC)"
-        : hrs + "h " + mins + "m (05:45 UTC)";
+        : `${hrs}h ${mins}m (05:45 UTC)`;
+
+      const netBadge = s.dataimpulse_enabled
+        ? "🌐 Residencial Sticky 120m"
+        : "⚪ Directo";
 
       const emb = new EmbedBuilder()
         .setColor(s.in_pre_reset_cutoff ? 0xef4444 : 0x22c55e)
-        .setTitle("🟢 Main Runner Server — Online 24/7")
-        .setDescription(
-          "• **Online / En Línea:** " + s.online_runners + "\n" +
-          "• **Standby / En Espera:** " + s.holding_runners + "\n" +
-          "• **Accepted / Aceptadas:** " + s.total_accepted + "\n" +
-          "• **Pre-Reset Cutoff:** " + cutoffText + "\n" +
-          "• **Disk / En Disco:** " + s.storage_bytes_on_disk + " bytes"
-        );
+        .setTitle("🟢 Zenith Main Runner — Live Status")
+        .addFields(
+          {
+            name: "📡 Actividad / Activity",
+            value:
+              `• **Online / En Línea:** \`${s.online_runners ?? 0}\`\n` +
+              `• **Standby / En Espera:** \`${s.holding_runners ?? 0}\`\n` +
+              `• **GP Test Activos:** \`${s.gp_testing_runners ?? 0}\`\n` +
+              `• **Horarios / Scheduled:** \`${s.scheduled_runners ?? 0}\``,
+            inline: true,
+          },
+          {
+            name: "🛡️ Sistema / System",
+            value:
+              `• **Aceptadas / Accepted:** \`${s.total_accepted ?? 0}\`\n` +
+              `• **Modo:** \`Sigilo Emulador\`\n` +
+              `• **Red / Proxy:** \`${netBadge}\`\n` +
+              `• **Pre-Reset:** \`${cutoffText}\``,
+            inline: true,
+          }
+        )
+        .setFooter({ text: "Zenith Rise • Zero-Downtime Cloud Runner" })
+        .setTimestamp();
+
       return i.editReply({ embeds: [emb] });
     } catch (e) {
-      return i.editReply("⚠️ Server URL: " + MAIN_RUNNER_URL + "\nReiniciando / Restarting...");
+      return i.editReply(
+        `⚠️ **Main Runner:** ${MAIN_RUNNER_URL}\n🇪🇸 El servidor se está actualizando o reiniciando.\n🇺🇸 The server is currently updating or restarting.`
+      );
     }
   }
 });
