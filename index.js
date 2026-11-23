@@ -265,11 +265,11 @@ client.on(Events.InteractionCreate, async (i) => {
     return i.reply({ embeds: [emb], ephemeral: true });
   }
 
-  // ===================== LIVE SERVER STATUS =====================
+// ===================== LIVE SERVER STATUS =====================
   if (i.customId === "live_st") {
     await i.deferReply({ ephemeral: true });
     try {
-      const r = await fetch(MAIN_RUNNER_URL + "/api/public/stats", {
+      const r = await fetch(MAIN_RUNNER_URL + "/api/public/stats?include_users=1", {
         signal: AbortSignal.timeout(6000),
       });
       if (!r.ok) throw new Error("HTTP " + r.status);
@@ -284,6 +284,25 @@ client.on(Events.InteractionCreate, async (i) => {
       const netBadge = s.dataimpulse_enabled
         ? "🌐 Residencial Sticky 120m"
         : "⚪ Directo";
+
+      const usersList = Array.isArray(s.online_users) ? s.online_users : [];
+      let onlineText = "— Ninguno / None";
+      if (usersList.length > 0) {
+        let acc = "";
+        let shown = 0;
+        for (const u of usersList) {
+          const icon = u.state === "gp_test" ? "🧪" : "🟢";
+          const grp = u.group ? ` \`${u.group.replace("_", " ")}\`` : "";
+          const secTag = u.is_sec ? " *(Sec)*" : "";
+          const label = u.discord_id ? `<@${u.discord_id}>` : `**${u.name}**`;
+          const line = `${icon} ${label}${secTag}${grp}\n`;
+          if ((acc + line).length > 960) break;
+          acc += line;
+          shown++;
+        }
+        const extra = usersList.length - shown;
+        onlineText = acc.trim() + (extra > 0 ? `\n*...y ${extra} más*` : "");
+      }
 
       const emb = new EmbedBuilder()
         .setColor(s.in_pre_reset_cutoff ? 0xef4444 : 0x22c55e)
@@ -306,6 +325,11 @@ client.on(Events.InteractionCreate, async (i) => {
               `• **Red / Proxy:** \`${netBadge}\`\n` +
               `• **Pre-Reset:** \`${cutoffText}\``,
             inline: true,
+          },
+          {
+            name: `👥 Usuarios Online (${usersList.length})`,
+            value: onlineText,
+            inline: false,
           }
         )
         .setFooter({ text: "Zenith Rise • Zero-Downtime Cloud Runner" })
